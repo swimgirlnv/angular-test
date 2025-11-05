@@ -1,0 +1,198 @@
+<div class="auth-container">
+  <!-- Auth Toggle Button -->
+  @if (!currentUser) {
+    <button class="auth-toggle-btn" (click)="toggleAuthModal()">
+      👤 Sign In / Sign Up
+    </button>
+  } @else {
+    <div class="user-info">
+      <div class="user-greeting">
+        <span class="user-name">Hi, {{ currentUser.firstName }}!</span>
+        <div class="rewards-info">
+          <span class="tier-badge" [style.background-color]="getTierColor(currentUser.tier)">
+            {{ currentUser.tier }}
+          </span>
+          <span class="points">{{ currentUser.rewardsPoints }} pts</span>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  }
+
+  <!-- Auth Modal -->
+  @if (showAuthModal) {
+    <div class="modal-overlay" (click)="toggleAuthModal()">
+      <div class="auth-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ isLoginMode ? 'Sign In' : 'Create Account' }}</h2>
+          <button class="close-btn" (click)="toggleAuthModal()">×</button>
+        </div>
+
+        <div class="modal-content">
+          <!-- Login Form -->
+          @if (isLoginMode) {
+            <form (ngSubmit)="onLogin()" #loginFormRef="ngForm">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  [(ngModel)]="loginForm.email"
+                  name="email"
+                  required
+                  placeholder="Enter your email">
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  [(ngModel)]="loginForm.password"
+                  name="password"
+                  required
+                  placeholder="Enter your password">
+              </div>
+
+              <div class="demo-credentials">
+                <button type="button" class="demo-btn" (click)="getDemoCredentials()">
+                  Use Demo Account
+                </button>
+                <small>Email: john&#64;example.com | Password: password123</small>
+              </div>
+
+              @if (errorMessage) {
+                <div class="error-message">{{ errorMessage }}</div>
+              }
+
+              @if (successMessage) {
+                <div class="success-message">{{ successMessage }}</div>
+              }
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="isLoading || !loginFormRef.form.valid">
+                @if (isLoading) {
+                  <span class="loading-spinner"></span>
+                  Signing In...
+                } @else {
+                  Sign In
+                }
+              </button>
+            </form>
+          }
+
+          <!-- Sign Up Form -->
+          @if (!isLoginMode) {
+            <form (ngSubmit)="onSignUp()" #signUpFormRef="ngForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName">First Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    [(ngModel)]="signUpForm.firstName"
+                    name="firstName"
+                    required
+                    placeholder="First name">
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    [(ngModel)]="signUpForm.lastName"
+                    name="lastName"
+                    required
+                    placeholder="Last name">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="signUpEmail">Email</label>
+                <input
+                  type="email"
+                  id="signUpEmail"
+                  [(ngModel)]="signUpForm.email"
+                  name="signUpEmail"
+                  required
+                  placeholder="Enter your email">
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone (Optional)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  [(ngModel)]="signUpForm.phone"
+                  name="phone"
+                  placeholder="Phone number">
+              </div>
+
+              <div class="form-group">
+                <label for="signUpPassword">Password</label>
+                <input
+                  type="password"
+                  id="signUpPassword"
+                  [(ngModel)]="signUpForm.password"
+                  name="signUpPassword"
+                  required
+                  minlength="6"
+                  placeholder="At least 6 characters">
+              </div>
+
+              <div class="rewards-info-box">
+                <h4>🎁 Join Our Rewards Program!</h4>
+                <ul>
+                  <li><strong>Bronze:</strong> Earn 1 point per $1 spent</li>
+                  <li><strong>Silver:</strong> 2x points + 5% discount</li>
+                  <li><strong>Gold:</strong> 2.5x points + 10% discount</li>
+                  <li><strong>Platinum:</strong> 3x points + 15% discount</li>
+                </ul>
+              </div>
+
+              @if (errorMessage) {
+                <div class="error-message">{{ errorMessage }}</div>
+              }
+
+              @if (successMessage) {
+                <div class="success-message">{{ successMessage }}</div>
+              }
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="isLoading || !signUpFormRef.form.valid">
+                @if (isLoading) {
+                  <span class="loading-spinner"></span>
+                  Creating Account...
+                } @else {
+                  Create Account
+                }
+              </button>
+            </form>
+          }
+
+          <!-- Toggle Mode -->
+          <div class="toggle-mode">
+            @if (isLoginMode) {
+              <p>Don't have an account?
+                <button type="button" class="link-btn" (click)="toggleMode()">
+                  Sign up here
+                </button>
+              </p>
+            } @else {
+              <p>Already have an account?
+                <button type="button" class="link-btn" (click)="toggleMode()">
+                  Sign in here
+                </button>
+              </p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

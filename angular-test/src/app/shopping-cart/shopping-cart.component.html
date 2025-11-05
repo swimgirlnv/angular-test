@@ -1,0 +1,102 @@
+<div class="cart-container">
+  <!-- Cart Toggle Button -->
+  <button class="cart-toggle" (click)="toggleCart()">
+    🛒 Cart ({{ itemCount }})
+    <span class="cart-total">${{ cartTotal.toFixed(2) }}</span>
+  </button>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" [class.open]="isOpen">
+    <div class="cart-header">
+      <h2>Shopping Cart</h2>
+      <button class="close-btn" (click)="toggleCart()">×</button>
+    </div>
+
+    <div class="cart-content">
+      @if (cartItems.length === 0) {
+        <div class="empty-cart">
+          <p>Your cart is empty</p>
+          <p>Start shopping to add items!</p>
+        </div>
+      } @else {
+        <div class="cart-items">
+          @for (item of cartItems; track item.product.id) {
+            <div class="cart-item">
+              <div class="item-image">{{ item.product.image }}</div>
+              <div class="item-details">
+                <h4 class="item-name">{{ item.product.name }}</h4>
+                <p class="item-price">${{ item.product.price.toFixed(2) }} each</p>
+                <div class="quantity-controls">
+                  <button
+                    class="qty-btn"
+                    (click)="updateQuantity(item.product.id, item.quantity - 1)">
+                    -
+                  </button>
+                  <span class="quantity">{{ item.quantity }}</span>
+                  <button
+                    class="qty-btn"
+                    (click)="updateQuantity(item.product.id, item.quantity + 1)">
+                    +
+                  </button>
+                </div>
+              </div>
+              <div class="item-actions">
+                <div class="item-total">${{ (item.product.price * item.quantity).toFixed(2) }}</div>
+                <button
+                  class="remove-btn"
+                  (click)="removeItem(item.product.id)">
+                  Remove
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="cart-footer">
+          <!-- Rewards Information -->
+          @if (currentUser) {
+            <div class="rewards-summary">
+              <div class="rewards-header">
+                <span class="rewards-icon">🎁</span>
+                <span>{{ userTier }} Member Benefits</span>
+              </div>
+
+              @if (discountAmount > 0) {
+                <div class="discount-info">
+                  <span>{{ userTier }} Discount ({{ tierDiscount }}%):</span>
+                  <span class="discount-amount">-${{ discountAmount.toFixed(2) }}</span>
+                </div>
+              }
+
+              @if (pointsToEarn > 0) {
+                <div class="points-info">
+                  <span>Points you'll earn:</span>
+                  <span class="points-amount">+{{ pointsToEarn }} pts</span>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="cart-summary">
+            @if (currentUser && discountAmount > 0) {
+              <div class="subtotal">Subtotal: ${{ baseTotal.toFixed(2) }}</div>
+              <div class="discount-line">{{ userTier }} Discount: -${{ discountAmount.toFixed(2) }}</div>
+            }
+            <div class="total-items">{{ itemCount }} items</div>
+            <div class="total-price">Total: ${{ cartTotal.toFixed(2) }}</div>
+          </div>
+
+          <div class="cart-actions">
+            <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+            <button class="checkout-btn" (click)="checkout()">Checkout</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  @if (isOpen) {
+    <div class="cart-overlay" (click)="toggleCart()"></div>
+  }
+</div>

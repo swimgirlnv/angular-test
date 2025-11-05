@@ -1,0 +1,128 @@
+@if (currentUser) {
+  <div class="rewards-container">
+    <!-- Rewards Toggle Button -->
+    <button class="rewards-toggle" (click)="toggleDashboard()">
+      🎁 My Rewards
+    </button>
+
+    <!-- Rewards Dashboard Modal -->
+    @if (showDashboard) {
+      <div class="modal-overlay" (click)="toggleDashboard()">
+        <div class="rewards-modal" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>My Rewards Dashboard</h2>
+            <button class="close-btn" (click)="toggleDashboard()">×</button>
+          </div>
+
+          <div class="dashboard-content">
+            <!-- User Overview -->
+            <div class="user-overview">
+              <div class="user-info">
+                <h3>Welcome, {{ currentUser.firstName }}!</h3>
+                <p>Member for {{ getDaysAsMember() }} days</p>
+              </div>
+              <div class="tier-badge-large" [style.background-color]="getTierColor(currentUser.tier)">
+                {{ currentUser.tier }}
+              </div>
+            </div>
+
+            <!-- Points Summary -->
+            <div class="points-summary">
+              <div class="points-card">
+                <div class="points-value">{{ currentUser.rewardsPoints }}</div>
+                <div class="points-label">Total Points</div>
+                <div class="points-cash">≈ ${{ getPointsValue().toFixed(2) }} value</div>
+              </div>
+            </div>
+
+            <!-- Tier Progress -->
+            <div class="tier-progress">
+              <h4>Tier Progress</h4>
+              @if (currentUser.tier !== 'Platinum') {
+                <div class="progress-info">
+                  <span>{{ getProgressToNextTier().pointsNeeded }} points to {{ getProgressToNextTier().nextTier }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getProgressToNextTier().progress"></div>
+                </div>
+              } @else {
+                <div class="max-tier">
+                  🏆 Congratulations! You've reached the highest tier!
+                </div>
+              }
+            </div>
+
+            <!-- Current Benefits -->
+            <div class="current-benefits">
+              <h4>Your {{ currentUser.tier }} Benefits</h4>
+              <div class="benefits-grid">
+                <div class="benefit-card">
+                  <div class="benefit-icon">💰</div>
+                  <div class="benefit-text">
+                    <div class="benefit-title">Points Multiplier</div>
+                    <div class="benefit-value">{{ getTierBenefits().pointsMultiplier }}x</div>
+                  </div>
+                </div>
+
+                @if (getTierBenefits().discount > 0) {
+                  <div class="benefit-card">
+                    <div class="benefit-icon">🏷️</div>
+                    <div class="benefit-text">
+                      <div class="benefit-title">Member Discount</div>
+                      <div class="benefit-value">{{ (getTierBenefits().discount * 100).toFixed(0) }}%</div>
+                    </div>
+                  </div>
+                }
+
+                <div class="benefit-card">
+                  <div class="benefit-icon">🎁</div>
+                  <div class="benefit-text">
+                    <div class="benefit-title">Special Offers</div>
+                    <div class="benefit-value">Exclusive</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier Information -->
+            <div class="tier-info">
+              <h4>All Tier Benefits</h4>
+              <div class="tiers-list">
+                <div class="tier-item" [class.current]="currentUser.tier === 'Bronze'">
+                  <div class="tier-name" style="color: #cd7f32;">🥉 Bronze</div>
+                  <div class="tier-benefits">1x points</div>
+                </div>
+
+                <div class="tier-item" [class.current]="currentUser.tier === 'Silver'">
+                  <div class="tier-name" style="color: #c0c0c0;">🥈 Silver (500+ pts)</div>
+                  <div class="tier-benefits">2x points + 5% discount</div>
+                </div>
+
+                <div class="tier-item" [class.current]="currentUser.tier === 'Gold'">
+                  <div class="tier-name" style="color: #ffd700;">🥇 Gold (1,000+ pts)</div>
+                  <div class="tier-benefits">2.5x points + 10% discount</div>
+                </div>
+
+                <div class="tier-item" [class.current]="currentUser.tier === 'Platinum'">
+                  <div class="tier-name" style="color: #e5e4e2;">💎 Platinum (2,000+ pts)</div>
+                  <div class="tier-benefits">3x points + 15% discount</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="rewards-tips">
+              <h4>💡 Maximize Your Rewards</h4>
+              <ul>
+                <li>Shop regularly to maintain your tier status</li>
+                <li>Combine purchases to reach tier thresholds faster</li>
+                <li>Check for special bonus point events</li>
+                <li>Use your points for discounts on future purchases</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
