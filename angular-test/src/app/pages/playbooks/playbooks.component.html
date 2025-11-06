@@ -1,0 +1,291 @@
+<mat-tab-group>
+  <!-- Active Playbooks Tab -->
+  <mat-tab label="Active Playbooks">
+    <div class="grid tab-content">
+      <!-- Create New Playbook Card -->
+      <mat-card class="material-card">
+        <h3 class="tab-header">
+          <mat-icon color="primary">auto_mode</mat-icon>
+          Create AI Automation
+        </h3>
+
+        <form [formGroup]="form" (ngSubmit)="create()" class="automation-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Automation Name</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              placeholder="Auto-approve invoices under $1000"
+              aria-label="Automation name">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category" aria-label="Automation category">
+              <mat-option value="document-processing">Document Processing</mat-option>
+              <mat-option value="data-validation">Data Validation</mat-option>
+              <mat-option value="workflow-automation">Workflow Automation</mat-option>
+              <mat-option value="compliance">Compliance</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rule (Natural Language)</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              formControlName="rule"
+              placeholder="IF document is invoice AND vendor is trusted AND amount < 1000 AND confidence > 95% THEN auto-approve AND notify AP team"
+              aria-label="Automation rule in natural language">
+            </textarea>
+          </mat-form-field>
+
+          <div class="triggers-actions-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Triggers</mat-label>
+              <mat-select formControlName="triggers" multiple aria-label="Automation triggers">
+                <mat-option value="document_uploaded">Document Uploaded</mat-option>
+                <mat-option value="ai_extraction_complete">AI Extraction Complete</mat-option>
+                <mat-option value="confidence_threshold_met">High Confidence</mat-option>
+                <mat-option value="vendor_verified">Vendor Verified</mat-option>
+                <mat-option value="amount_threshold">Amount Threshold</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Actions</mat-label>
+              <mat-select formControlName="actions" multiple aria-label="Automation actions">
+                <mat-option value="auto_approve">Auto Approve</mat-option>
+                <mat-option value="send_notification">Send Notification</mat-option>
+                <mat-option value="create_task">Create Task</mat-option>
+                <mat-option value="update_database">Update Database</mat-option>
+                <mat-option value="generate_report">Generate Report</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <mat-slide-toggle formControlName="active" aria-label="Activate automation immediately">
+              Activate immediately
+            </mat-slide-toggle>
+            <div class="form-buttons">
+              @if (isEditMode) {
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="cancelEdit()"
+                  aria-label="Cancel editing">
+                  <mat-icon>cancel</mat-icon>
+                  Cancel
+                </button>
+              }
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="form.invalid"
+                [attr.aria-label]="formButtonText">
+                <mat-icon>{{ formButtonIcon }}</mat-icon>
+                {{ formButtonText }}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Templates Section -->
+        <div class="templates-section">
+          <mat-divider></mat-divider>
+          
+          <div class="templates-header">
+            <h4 class="templates-title">
+              <mat-icon color="accent">library_books</mat-icon>
+              Quick Start Templates
+            </h4>
+            <p class="templates-description">
+              Click any template below to pre-fill the form with common automation patterns
+            </p>
+          </div>
+
+          <div class="template-grid">
+            @for (template of automationTemplates; track template.id) {
+              <article
+                class="template-card"
+                (click)="handleTemplateClick(template)"
+                [attr.aria-label]="'Template: ' + template.name + ' - Click to pre-fill form'"
+                tabindex="0"
+                (keydown.enter)="handleTemplateClick(template)"
+                (keydown.space)="handleTemplateClick(template)">
+
+                <header class="template-header">
+                  <mat-icon [color]="template.color">{{ template.icon }}</mat-icon>
+                  <strong>{{ template.name }}</strong>
+                </header>
+
+                <p class="template-description">{{ template.description }}</p>
+
+                <div class="template-meta">
+                  <mat-chip size="small" color="accent">{{ template.triggers?.length }} triggers</mat-chip>
+                  <mat-chip size="small" color="primary">{{ template.actions?.length }} actions</mat-chip>
+                </div>
+              </article>
+            }
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Playbook List Card -->
+      <mat-card class="material-card">
+        <h3 class="tab-header">
+          <mat-icon color="primary">list</mat-icon>
+          AI Automations
+        </h3>
+
+        <div class="playbook-list">
+          @for (playbook of store.playbooks(); track playbook.id) {
+            <article
+              class="playbook-card"
+              [class.active]="playbook.active"
+              [class.inactive]="!playbook.active"
+              [attr.aria-label]="'Automation: ' + playbook.name">
+
+              <header class="playbook-header">
+                <div style="flex:1">
+                  <div class="playbook-title-row">
+                    <span class="status-indicator" [class.active]="playbook.active" [class.inactive]="!playbook.active"></span>
+                    <strong>{{ playbook.name }}</strong>
+                    <span class="category-badge">{{ playbook.category || 'general' }}</span>
+                  </div>
+                  <div class="playbook-rule">{{ playbook.rule }}</div>
+                </div>
+                <mat-slide-toggle
+                  [checked]="playbook.active"
+                  (change)="togglePlaybook(playbook.id)"
+                  [aria-label]="'Toggle ' + playbook.name + ' automation'">
+                </mat-slide-toggle>
+              </header>
+
+              <div class="playbook-stats" role="group" aria-label="Automation statistics">
+                <div class="stat-item">
+                  <div class="stat-value">{{ playbook.runs }}</div>
+                  <div class="stat-label">Executions</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ playbook.successRate || 0 | number:'1.0-1' }}%</div>
+                  <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ getTimeSinceLastRun(playbook.lastRun) }}</div>
+                  <div class="stat-label">Last Run</div>
+                </div>
+              </div>
+
+              @if (playbook.successRate) {
+                <div class="performance-bar">
+                  <div class="performance-display">
+                    <span class="performance-label">Performance</span>
+                    <span class="performance-value">{{ playbook.successRate }}%</span>
+                  </div>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="playbook.successRate"
+                    [color]="getPerformanceColor(playbook.successRate)"
+                    [attr.aria-label]="'Performance: ' + playbook.successRate + ' percent'">
+                  </mat-progress-bar>
+                </div>
+              }
+
+              @if (playbook.triggers && playbook.triggers.length > 0) {
+                <div class="chips-section">
+                  <div class="chips-label">Triggers:</div>
+                  <div class="trigger-chips" role="group" aria-label="Automation triggers">
+                    @for (trigger of playbook.triggers; track trigger) {
+                      <mat-chip size="small" color="accent">{{ formatTrigger(trigger) }}</mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (playbook.actions && playbook.actions.length > 0) {
+                <div class="chips-section">
+                  <div class="chips-label">Actions:</div>
+                  <div class="action-chips" role="group" aria-label="Automation actions">
+                    @for (action of playbook.actions; track action) {
+                      <mat-chip size="small" color="primary">{{ formatAction(action) }}</mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="playbook-actions" role="group" aria-label="Automation actions">
+                <button
+                  mat-stroked-button
+                  size="small"
+                  class="action-button"
+                  (click)="editPlaybook(playbook)"
+                  [attr.aria-label]="'Edit ' + playbook.name">
+                  <mat-icon>edit</mat-icon>
+                  Edit
+                </button>
+                <button
+                  mat-stroked-button
+                  size="small"
+                  class="action-button"
+                  (click)="testRunPlaybook(playbook)"
+                  [attr.aria-label]="'Test run ' + playbook.name">
+                  <mat-icon>play_arrow</mat-icon>
+                  Test Run
+                </button>
+                <button
+                  mat-stroked-button
+                  size="small"
+                  color="warn"
+                  class="action-button"
+                  (click)="showDeleteWarning(playbook)"
+                  [attr.aria-label]="'Delete ' + playbook.name">
+                  <mat-icon>delete</mat-icon>
+                  Delete
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <!-- Analytics Tab -->
+  <mat-tab label="Analytics">
+    <div class="tab-content">
+      <h3 class="tab-header">
+        <mat-icon color="primary">analytics</mat-icon>
+        Automation Analytics
+      </h3>
+
+      <div class="analytics-overview">
+        <mat-card class="material-card">
+          <h4 style="margin:0 0 16px 0">Performance Overview</h4>
+          <div style="display:grid;gap:12px;grid-template-columns:repeat(2,1fr)">
+            <div class="analytics-metric">
+              <div class="analytics-metric-value success">{{ getTotalRuns() }}</div>
+              <div class="analytics-metric-label">Total Executions</div>
+            </div>
+            <div class="analytics-metric">
+              <div class="analytics-metric-value primary">{{ getAvgSuccessRate() | number:'1.0-1' }}%</div>
+              <div class="analytics-metric-label">Avg Success Rate</div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="material-card">
+          <h4 style="margin:0 0 16px 0">Category Breakdown</h4>
+          @for (category of getCategories(); track category.name) {
+            <div class="category-breakdown-item">
+              <span>{{ category.name | titlecase }}</span>
+              <mat-chip size="small">{{ category.count }}</mat-chip>
+            </div>
+          }
+        </mat-card>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

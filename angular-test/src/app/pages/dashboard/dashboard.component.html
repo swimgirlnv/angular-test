@@ -1,0 +1,153 @@
+<!-- AI Processing Overview -->
+  <mat-card class="ai-gradient-card">
+    <div class="card-header">
+      <mat-icon style="color:white">psychology</mat-icon>
+      <h3 style="color:white">AI Processing Intelligence</h3>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card ai-metric-card">
+        <div class="metric-value ai-metric-value">{{ stats().processed }}</div>
+        <div class="metric-label ai-metric-label">Documents Processed</div>
+      </div>
+      <div class="metric-card ai-metric-card">
+        <div class="metric-value ai-metric-value">{{ stats().avgConfidence | number:'1.0-1' }}%</div>
+        <div class="metric-label ai-metric-label">Avg AI Confidence</div>
+      </div>
+      <div class="metric-card ai-metric-card">
+        <div class="metric-value ai-metric-value">{{ stats().processingRate | number:'1.0-1' }}%</div>
+        <div class="metric-label ai-metric-label">Processing Success</div>
+      </div>
+    </div>
+  </mat-card>
+
+<div class="grid ai-slide-in">
+
+  <!-- Data Sources Status -->
+  <mat-card class="metric-card">
+    <div class="card-header">
+      <mat-icon color="primary">hub</mat-icon>
+      <h3>Data Sources</h3>
+    </div>
+    <p>{{ enabledCount() }} / {{ totalConnectors() }} sources connected</p>
+    <div style="margin-top:12px">
+      @for (connector of topConnectors(); track connector.id) {
+        <div class="connector-item">
+          <div class="connector-info">
+            <mat-icon [class]="connector.enabled ? 'status-success' : 'status-error'">
+              {{ connector.icon || 'hub' }}
+            </mat-icon>
+            <span>{{ connector.name }}</span>
+          </div>
+          <span class="status-indicator" [class]="connector.enabled ? 'status-success' : 'status-error'">
+            {{ connector.enabled ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      }
+    </div>
+    <button mat-stroked-button routerLink="/connectors" class="action-button">
+      Manage Sources
+    </button>
+  </mat-card>
+
+  <!-- Pending Intelligence -->
+  <mat-card class="metric-card">
+    <div class="card-header">
+      <mat-icon color="accent">pending_actions</mat-icon>
+      <h3>Pending Intelligence</h3>
+    </div>
+    <p>{{ pendingCount() }} documents awaiting review</p>
+    @if (pendingCount() > 0) {
+      <div style="margin-top:12px">
+        <div class="confidence-bar">
+          <span class="confidence-label">Processing confidence distribution:</span>
+          <mat-progress-bar mode="determinate" [value]="highConfidencePercent()" color="primary"></mat-progress-bar>
+          <div class="confidence-details">
+            <span>{{ highConfidencePercent() | number:'1.0-0' }}% High Confidence</span>
+            <span>{{ 100 - highConfidencePercent() | number:'1.0-0' }}% Review Needed</span>
+          </div>
+        </div>
+      </div>
+    }
+    <button mat-stroked-button routerLink="/ingest" class="action-button">
+      Review Documents
+    </button>
+  </mat-card>
+
+  <!-- Automation Performance -->
+  <mat-card class="metric-card">
+    <div class="card-header">
+      <mat-icon color="primary">auto_mode</mat-icon>
+      <h3>Automation Performance</h3>
+    </div>
+    <p>{{ activePlaybooks() }} active playbooks running</p>
+    <div style="margin-top:12px">
+      @for (playbook of topPlaybooks(); track playbook.id) {
+        <div class="playbook-item">
+          <div class="playbook-header">
+            <strong>{{ playbook.name }}</strong>
+            <mat-chip [color]="playbook.active ? 'primary' : 'basic'" size="small">
+              {{ playbook.active ? 'Active' : 'Paused' }}
+            </mat-chip>
+          </div>
+          <div class="playbook-stats">
+            {{ playbook.runs }} runs • {{ playbook.successRate }}% success rate
+          </div>
+        </div>
+      }
+    </div>
+    <button mat-stroked-button routerLink="/playbooks" class="action-button">
+      Manage Automation
+    </button>
+  </mat-card>
+</div>
+
+<!-- Document Queue Table -->
+<mat-card class="document-table-card">
+  <div class="card-header">
+    <mat-icon color="primary">queue</mat-icon>
+    <h3>Recent Document Processing</h3>
+  </div>
+  <table mat-table [dataSource]="recentDocs()" class="mat-elevation-z1">
+    <ng-container matColumnDef="file">
+      <th mat-header-cell *matHeaderCellDef>Document</th>
+      <td mat-cell *matCellDef="let d">
+        <div>{{ d.fileName }}</div>
+        <div class="document-info">{{ d.source || 'Manual upload' }}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let d">
+        <mat-chip size="small">{{ d.type }}</mat-chip>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let d">
+        <mat-chip
+          [color]="getStatusColor(d.status)"
+          size="small">
+          {{ d.status }}
+        </mat-chip>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="confidence">
+      <th mat-header-cell *matHeaderCellDef>AI Confidence</th>
+      <td mat-cell *matCellDef="let d">
+        @if (d.fields) {
+          <div>{{ getAvgConfidence(d) | number:'1.0-0' }}%</div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getAvgConfidence(d)"
+            [color]="getConfidenceColor(getAvgConfidence(d))"
+            class="confidence-progress">
+          </mat-progress-bar>
+        } @else {
+          <span style="opacity:0.5">—</span>
+        }
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['file','type','status','confidence']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['file','type','status','confidence'];"></tr>
+  </table>
+</mat-card>

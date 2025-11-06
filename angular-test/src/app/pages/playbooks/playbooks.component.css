@@ -1,0 +1,429 @@
+/* Layout & Grid Systems */
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.template-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.material-card {
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--ai-shadow-light);
+  background: var(--ai-surface);
+}
+
+/* Playbook Cards & Lists */
+.playbook-list {
+  display: grid;
+  gap: 16px;
+}
+
+.playbook-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.playbook-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.playbook-card.active {
+  border-color: #4caf50;
+  background: #f8fff8;
+}
+
+.playbook-card.inactive {
+  opacity: 0.7;
+  border-color: #e0e0e0;
+}
+
+.playbook-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+/* Template Cards */
+.template-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.template-card:hover {
+  border-color: #1976d2;
+  background: #f3f8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Statistics & Performance */
+.playbook-stats {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 12px 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.performance-bar {
+  margin: 8px 0;
+}
+
+/* Chips & Badges */
+.trigger-chips,
+.action-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.category-badge {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+/* Analytics Styles */
+.analytics-overview {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.analytics-metric {
+  text-align: center;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.analytics-metric-value {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.analytics-metric-value.success {
+  color: #4caf50;
+}
+
+.analytics-metric-value.primary {
+  color: #1976d2;
+}
+
+.analytics-metric-label {
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.category-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Form Styles */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.triggers-actions-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.automation-form {
+  width: 100%;
+}
+
+.automation-form .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+/* Action Buttons */
+.playbook-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.action-button {
+  flex: 1;
+  min-width: auto;
+}
+
+/* Tab Content Spacing */
+.tab-content {
+  margin-top: 16px;
+}
+
+.tab-header {
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-description {
+  opacity: 0.7;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+/* Template Features */
+.templates-section {
+  margin-top: 24px;
+}
+
+.templates-header {
+  margin: 16px 0 20px 0;
+}
+
+.templates-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.templates-description {
+  margin: 0 0 16px 0;
+  opacity: 0.7;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.template-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.template-description {
+  margin: 0 0 12px 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.template-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Rule Display */
+.playbook-rule {
+  opacity: 0.8;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.playbook-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* Performance Indicators */
+.performance-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.performance-label {
+  font-size: 0.9rem;
+}
+
+.performance-value {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* Trigger & Action Labels */
+.chips-section {
+  margin-top: 12px;
+}
+
+.chips-label {
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+/* Warning Styles for Snackbars */
+:host ::ng-deep .warn-snackbar {
+  background: #ff9800 !important;
+  color: white !important;
+}
+
+:host ::ng-deep .warn-snackbar .mat-mdc-snack-bar-action {
+  color: white !important;
+}
+
+:host ::ng-deep .error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+:host ::ng-deep .error-snackbar .mat-mdc-snack-bar-action {
+  color: white !important;
+}
+
+:host ::ng-deep .success-snackbar {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+:host ::ng-deep .success-snackbar .mat-mdc-snack-bar-action {
+  color: white !important;
+}
+
+:host ::ng-deep .info-snackbar {
+  background: #2196f3 !important;
+  color: white !important;
+}
+
+:host ::ng-deep .info-snackbar .mat-mdc-snack-bar-action {
+  color: white !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .triggers-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .form-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .playbook-actions {
+    flex-direction: column;
+  }
+
+  .playbook-stats {
+    grid-template-columns: 1fr;
+  }
+}@media (max-width: 480px) {
+  .grid {
+    gap: 12px;
+  }
+
+  .audit-item {
+    padding: 8px;
+  }
+
+  .timeline-item {
+    margin-bottom: 12px;
+  }
+
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enhanced Interactive States */
+.playbook-card:focus-within {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+.template-card:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* Loading States */
+.automation-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Status Indicators */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.status-indicator.active {
+  background-color: #4caf50;
+}
+
+.status-indicator.inactive {
+  background-color: #9e9e9e;
+}

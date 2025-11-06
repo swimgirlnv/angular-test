@@ -1,0 +1,420 @@
+/* Layout & Grid Systems */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.tab-content {
+  margin-top: 16px;
+}
+
+.tab-header {
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.material-card {
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: var(--ai-shadow-light);
+  background: white;
+}
+
+/* Audit Items & Cards */
+.audit-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.audit-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: #ccc;
+}
+
+.audit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.audit-content {
+  margin-top: 8px;
+}
+
+.audit-details {
+  opacity: 0.6;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.audit-timestamp {
+  opacity: 0.6;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.audit-document {
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+/* Timeline Styles */
+.timeline {
+  border-left: 2px solid #e0e0e0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.timeline-item {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ai-primary, #1976d2);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* AI Decision Specific Styles */
+.ai-decision-model {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.ai-decision-document {
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.ai-decision-extracted {
+  margin-top: 8px;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border-left: 3px solid #1976d2;
+}
+
+.ai-decision-extracted strong {
+  color: #1976d2;
+}
+
+/* Confidence Level Indicators */
+.confidence-high {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.confidence-medium {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.confidence-low {
+  color: #f44336;
+  font-weight: 500;
+}
+
+/* Confidence Chip Styles */
+.confidence-chip.confidence-high {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.confidence-chip.confidence-medium {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.confidence-chip.confidence-low {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* Table Enhancements */
+.audit-table {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.audit-table .mat-mdc-header-cell {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.audit-table .mat-mdc-cell {
+  padding: 12px 8px;
+}
+
+/* Compliance Chip Styles */
+.compliance-chip {
+  font-size: 0.8rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px;
+}
+
+.compliance-chip.compliant {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.compliance-chip.non-compliant {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* Fix Material Design chip content alignment */
+.compliance-chip .mat-mdc-chip-action-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.compliance-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  line-height: 1 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Document Processing Status */
+.processing-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.processing-status.completed {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.processing-status.processing {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.processing-status.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* Action Labels */
+.action-label {
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.action-label.extraction {
+  color: #4caf50;
+}
+
+.action-label.validation {
+  color: #ff9800;
+}
+
+.action-label.approval {
+  color: #2196f3;
+}
+
+/* Enhanced Visual Hierarchy */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.subsection-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+/* User Information */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .audit-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .timeline {
+    padding-left: 12px;
+  }
+
+  .timeline-dot {
+    left: -16px;
+  }
+
+  .audit-table {
+    font-size: 0.9rem;
+  }
+
+  .audit-table .mat-mdc-cell {
+    padding: 8px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    gap: 12px;
+  }
+
+  .audit-item {
+    padding: 8px;
+  }
+
+  .timeline-item {
+    margin-bottom: 12px;
+  }
+}
+
+/* Enhanced Interactive States */
+.audit-item:focus-within {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.3);
+}
+
+/* Loading States */
+.audit-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.audit-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Data Quality Indicators */
+.data-quality {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+.data-quality-icon {
+  font-size: 1rem;
+}
+
+.quality-excellent {
+  color: #4caf50;
+}
+
+.quality-good {
+  color: #8bc34a;
+}
+
+.quality-fair {
+  color: #ff9800;
+}
+
+.quality-poor {
+  color: #f44336;
+}
+
+/* Audit Trail Enhancements */
+.audit-trail-item {
+  border-left: 3px solid #e0e0e0;
+  padding-left: 12px;
+  margin-bottom: 12px;
+}
+
+.audit-trail-item.important {
+  border-left-color: #ff9800;
+  background-color: #fff8e1;
+}
+
+.audit-trail-item.critical {
+  border-left-color: #f44336;
+  background-color: #ffebee;
+}
+
+/* Document Type Indicators */
+.document-type {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.document-type.invoice {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.document-type.contract {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.document-type.report {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}

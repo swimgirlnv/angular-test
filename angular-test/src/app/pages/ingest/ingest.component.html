@@ -1,0 +1,172 @@
+<mat-tab-group>
+  <mat-tab label="Document Upload">
+    <div class="tab-content">
+      <h2 class="section-header">AI Document Processing</h2>
+      <p class="section-description">Upload documents for intelligent extraction and analysis</p>
+
+      <!-- File Upload Zone -->
+      <mat-card class="upload-card">
+        <div
+          class="upload-zone"
+          [class.processing]="isProcessing()"
+          (click)="fileInput.click()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)">
+
+          @if (isProcessing()) {
+            <mat-spinner diameter="40" class="processing-spinner"></mat-spinner>
+            <h3 class="processing-title">Processing Document...</h3>
+            <p class="processing-description">AI models are analyzing your document</p>
+          } @else {
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <h3 class="upload-title">Drop files here or click to upload</h3>
+            <p class="upload-description">
+              Supports PDF, Word, Excel, Images (PNG, JPG), and Email files
+            </p>
+          }
+
+          <input #fileInput type="file" style="display:none"
+                 accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.eml"
+                 (change)="onFile($event)" multiple />
+        </div>
+
+        @if (isProcessing()) {
+          <div class="processing-steps">
+            @for (step of processingSteps(); track step.id) {
+              <div class="step" [class]="step.status">
+                <mat-icon [color]="getStepIconColor(step.status)">
+                  {{ getStepIcon(step.status) }}
+                </mat-icon>
+                <div class="step-content">
+                  <div class="step-name">{{ step.name }}</div>
+                  <div class="step-description">{{ step.description }}</div>
+                </div>
+                @if (step.status === 'processing') {
+                  <mat-spinner diameter="20" class="step-spinner"></mat-spinner>
+                }
+              </div>
+            }
+          </div>
+        }
+      </mat-card>
+
+      <!-- AI Model Selection -->
+      <mat-card class="config-card">
+        <h3 class="ai-section-title">
+          <mat-icon>psychology</mat-icon>
+          <span>AI Processing Configuration</span>
+        </h3>
+        <div class="model-selection-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>AI Model</mat-label>
+            <mat-select [value]="selectedModelValue()" (valueChange)="selectedModelValue.set($event)">
+              <mat-option value="forml-document-v2.1">forml Document v2.1 (Recommended)</mat-option>
+              <mat-option value="forml-legal-v1.5">forml Legal v1.5</mat-option>
+              <mat-option value="forml-financial-v1.8">forml Financial v1.8</mat-option>
+              <mat-option value="forml-general-v3.0">forml General v3.0</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Confidence Threshold</mat-label>
+            <mat-select [value]="confidenceThresholdValue()" (valueChange)="confidenceThresholdValue.set($event)">
+              <mat-option value="0.95">High (95%)</mat-option>
+              <mat-option value="0.85">Medium (85%)</mat-option>
+              <mat-option value="0.70">Low (70%)</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card>
+
+      <!-- Extracted Results -->
+      @if (currentDoc()) {
+        <mat-card class="results-card">
+          <h3 class="extraction-title">
+            <mat-icon color="primary">auto_awesome</mat-icon>
+            <span>AI Extraction Results</span>
+          </h3>
+
+          <div class="ai-model-info">
+            <div class="model-info-header">
+              <div>
+                <strong>{{ currentDoc()?.aiModel }}</strong>
+                <div class="model-details">
+                  Processing time: {{ currentDoc()?.processingTime }}s
+                </div>
+              </div>
+              <mat-chip color="primary">
+                {{ getOverallConfidence() | number:'1.0-1' }}% Overall Confidence
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            @for (field of extractedFields(); track field.key) {
+              <div class="field-card">
+                <div class="field-header">
+                  <strong>{{ field.key | titlecase }}</strong>
+                  <mat-chip [class]="getConfidenceClass(field.confidence)" size="small">
+                    {{ field.confidence * 100 | number:'1.0-1' }}%
+                  </mat-chip>
+                </div>
+                <div class="field-value">{{ field.value }}</div>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="field.confidence * 100"
+                  [color]="getConfidenceColor(field.confidence)">
+                </mat-progress-bar>
+                @if (field.source) {
+                  <div class="field-source">
+                    Source: {{ field.source }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="action-bar">
+            <div class="action-left">
+              <button mat-stroked-button (click)="rejectDoc()" color="warn">
+                <mat-icon>close</mat-icon>&nbsp;Reject
+              </button>
+              <button mat-stroked-button (click)="editFields()">
+                <mat-icon>edit</mat-icon>&nbsp;Edit Fields
+              </button>
+            </div>
+            <div class="action-right">
+              <button mat-raised-button color="primary" (click)="approve()">
+                <mat-icon>check</mat-icon>&nbsp;Approve & Process
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      }
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Processing Queue">
+    <div class="tab-content">
+      <h3 class="queue-title">Document Processing Queue</h3>
+      @for (doc of documents(); track doc.id) {
+        <mat-card class="queue-item">
+          <div class="queue-item-content">
+            <div class="queue-item-info">
+              <div class="queue-item-title">{{ doc.fileName }}</div>
+              <div class="queue-item-meta">
+                {{ doc.uploadedAt | date:'medium' }} • {{ doc.source || 'Manual upload' }}
+              </div>
+            </div>
+            <div class="queue-item-actions">
+              <mat-chip [color]="getStatusColor(doc.status)">{{ doc.status }}</mat-chip>
+              @if (doc.status !== 'pending') {
+                <button mat-icon-button (click)="viewDoc(doc)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              }
+            </div>
+          </div>
+        </mat-card>
+      }
+    </div>
+  </mat-tab>
+</mat-tab-group>
